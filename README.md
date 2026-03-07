@@ -63,5 +63,5 @@ When an image is uploaded, the backend constructs a Contextual System Prompt:
 "User Profile: Keto Diet, 50g Carb Limit. Scanned Item: Granola Bar. Logic: Extract Carbs, check for hidden Maltodextrin, and calculate % of 50g limit used."
 
 👨‍💻 About the Developer
-Narasimha Prabhu
+Arjun S Pai
 B.Tech Computer Science & Engineering | Model Engineering College
