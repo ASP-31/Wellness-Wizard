@@ -1,67 +1,73 @@
-# Welness-Wizard
-🥗 AI MacroVision: Personalized Nutrition & Health Guard
-AI MacroVision is a high-performance MERN stack application that acts as a real-time nutritional auditor. It bridges the gap between generic calorie counting and personalized health by using Gemini 1.5 Flash to analyze food labels against a user's unique medical and dietary profile.
+# 🥗 AI Macro Vision
 
-✨ Key Features
-📸 Snap & Analyze: Upload a photo of any nutrition label or ingredient list for instant OCR and analysis.
+**AI Macro Vision** is a full-stack MERN application that uses **Google Gemini 3.0** to provide instant nutritional analysis from food images. Designed for users on specific diets like **Keto**, it tracks daily macros and provides a visual dashboard of nutritional progress.
 
-⚖️ Contextual Health Logic: Moving beyond "good" or "bad"—the AI judges food based on your goals (e.g., flagging high sodium for hypertension or low protein for muscle gain).
+## 🚀 Features
 
-🎯 Live Macro Budgeting: Dynamic dashboard that updates your remaining Carbs, Protein, and Fats the moment you scan an item.
+* **AI Image Analysis**: Upload a photo of your meal and get instant estimates for Calories, Protein, Carbs, and Fats.
+* **Dynamic Progress Tracking**: Real-time progress bars that change color based on daily goals (e.g., turning red if you exceed carb limits).
+* **Keto-Focused Logic**: Specialized "Verdict" system that flags food items based on Keto compatibility.
+* **Data Export**: Download a text-based nutrition report of your recent scans for offline tracking.
+* **Persistent History**: All scans are securely stored in **MongoDB** for long-term progress monitoring.
 
-🚫 Hidden Ingredient Detector: Automatically flags ultra-processed additives, hidden sugars, and allergens.
+## 🛠️ Tech Stack
 
-📊 Historical Trends: MongoDB-backed history to track your dietary improvements over time.
+* **Frontend**: React.js, Tailwind CSS, Axios.
+* **Backend**: Node.js, Express.js.
+* **Database**: MongoDB.
+* **AI Engine**: Gemini 3.0 API.
+* **Image Handling**: Cloudinary.
 
-🛠️ Tech Stack & Architecture
-The MERN + AI Blueprint
-Frontend: React.js + Tailwind CSS (Mobile-responsive UI).
+## 📋 Installation & Setup
 
-Backend: Node.js + Express.js (RESTful API Architecture).
+### 1. Prerequisites
 
-Database: MongoDB Atlas (NoSQL Document Storage for flexible user profiles).
+* Node.js (v18+)
+* MongoDB Atlas Account
+* Gemini API Key
 
-Intelligence: Gemini 1.5 Flash (Multimodal Vision-to-Text reasoning).
+### 2. Backend Setup
 
-Media: Cloudinary (Image hosting & transformation).
+```bash
+cd server
+npm install
 
-📂 Project Structure
-Plaintext
-ai-macro-vision/
-├── 📁 client/                # React Frontend
-│   ├── 📁 src/
-│   │   ├── 📁 components/    # Reusable UI (Camera, Charts)
-│   │   ├── 📁 context/       # Auth & Macro State Management
-│   │   └── 📁 hooks/         # Custom API hooks
-├── 📁 server/                # Node.js Backend
-│   ├── 📁 controllers/       # AI Logic & DB Operations
-│   ├── 📁 models/            # MongoDB Schemas (User, Scans)
-│   ├── 📁 routes/            # Express API Endpoints
-│   └── server.js             # Server Entry Point
-└── 📄 .env.example           # Template for API Keys
-⚙️ Setup & Installation
-Clone & Install
+```
 
-Bash
-git clone https://github.com/narasimha-prabhu/ai-macro-vision.git
-npm run install-all # Custom script to install client & server deps
-Environment Configuration
-Create a .env file in the /server directory:
+Create a `.env` file in the `server` directory:
 
-Code snippet
+```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
-GEMINI_API_KEY=your_google_ai_key
+MONGO_URI=your_mongodb_uri
+GEMINI_API_KEY=your_api_key
 CLOUDINARY_CLOUD_NAME=your_name
-Launch
+CLOUDINARY_API_KEY=your_key
+CLOUDINARY_API_SECRET=your_secret
 
-Bash
-npm run dev # Starts both concurrently
-🧪 How the AI Logic Works
-When an image is uploaded, the backend constructs a Contextual System Prompt:
+```
 
-"User Profile: Keto Diet, 50g Carb Limit. Scanned Item: Granola Bar. Logic: Extract Carbs, check for hidden Maltodextrin, and calculate % of 50g limit used."
+```bash
+npm run dev
 
-👨‍💻 About the Developer
-Arjun S Pai
-B.Tech Computer Science & Engineering | Model Engineering College
+```
+
+### 3. Frontend Setup
+
+```bash
+cd client
+npm install
+npm start
+
+```
+
+## 👤 Author
+
+**Arjun S Pai** *Computer Science & Engineering Student* *Model Engineering College (MEC)*
+
+---
+
+### 🛡️ Future Scope
+
+* Integration with wearable fitness trackers.
+* Multi-language support for regional Indian cuisines.
+* Recipe suggestions based on remaining daily macro budget.
