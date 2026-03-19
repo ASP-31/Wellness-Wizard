@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const ScanHistorySchema = new mongoose.Schema({
+const scanHistorySchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     foodName: { type: String, required: true },
+    imageUrl: { type: String }, // New field for the photo
     isHealthy: { type: Boolean },
     reasoning: { type: String },
     macros: {
@@ -10,8 +11,7 @@ const ScanHistorySchema = new mongoose.Schema({
         carbs: Number,
         protein: Number,
         fats: Number
-    },
-    createdAt: { type: Date, default: Date.now }
-});
+    }
+}, { timestamps: true });
 
-module.exports = mongoose.model('ScanHistory', ScanHistorySchema);
+module.exports = mongoose.model("ScanHistory", scanHistorySchema);

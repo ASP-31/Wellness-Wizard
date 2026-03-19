@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 const userController = require('../controllers/userController');
 const ScanHistory = require('../models/ScanHistory');
+import { updateProfile } from '../controllers/userController.js';
 // 1. Static routes go FIRST
 router.post('/signup', userController.createUser);
 
@@ -26,4 +27,5 @@ router.delete('/:id/history/clear', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+router.put('/:userId/update-profile', updateProfile);
 module.exports = router;

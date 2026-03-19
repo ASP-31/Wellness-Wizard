@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const aiController = require('../controllers/aiController'); // Capital 'C'
-const ScanHistory = require('../models/ScanHistory');
-// Define the POST endpoint for scanning
-router.post('/analyze', aiController.analyzeFood);
+import express from 'express';
+import { analyzeImage } from '../controllers/aiController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
-module.exports = router;
+const router = express.Router();
+
+// Only logged-in users can use the Gemini scanner
+router.post('/analyze', protect, analyzeImage);
+
+export default router;
