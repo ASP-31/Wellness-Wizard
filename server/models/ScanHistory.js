@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const scanHistorySchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -14,4 +14,4 @@ const scanHistorySchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model("ScanHistory", scanHistorySchema);
+export default mongoose.model("ScanHistory", scanHistorySchema);

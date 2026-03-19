@@ -1,7 +1,7 @@
 // client/src/components/Layout/Navbar.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Wizard, History, LayoutDashboard, LogOut } from 'lucide-react';
+import { Wand2, History, LayoutDashboard, LogOut } from 'lucide-react';
 
 const Navbar = ({ user, onLogout }) => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Navbar = ({ user, onLogout }) => {
         {/* Logo Section */}
         <Link to="/" className="flex items-center gap-2 group">
           <div className="bg-blue-600 p-2 rounded-xl group-hover:rotate-12 transition-transform">
-            <Wizard className="text-white" size={24} />
+            <Wand2 className="text-white" size={24} />
           </div>
           <span className="text-xl font-black tracking-tighter text-slate-800">WELLNESS WIZARD</span>
         </Link>

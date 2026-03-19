@@ -5,8 +5,8 @@ import Navbar from './components/Layout/Navbar';
 import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import ProfileForm from './components/Onboarding/ProfileForm';
-import DashboardPage from './pages/DashboardPage'; // Fixed Typo
-import HistoryPage from './pages/HistoryPage';
+import Dashboard from './pages/Dashboard';
+import History from './pages/HistoryPage';
 
 import DailyProgress from './components/Dashboard/DailyProgress';
 import ImageUpload from './components/Dashboard/ImageUpload';
@@ -23,7 +23,7 @@ function App() {
     <Router>
       <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
         {user && <Navbar user={user} onLogout={() => { localStorage.removeItem('userInfo'); setUser(null); }} />}
-        
+
         <Routes>
           {/* Auth Routes */}
           <Route path="/login" element={!user ? <Login onAuth={handleAuth} /> : <Navigate to="/" />} />

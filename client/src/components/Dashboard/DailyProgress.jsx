@@ -9,29 +9,33 @@ const DailyProgress = ({ scans = [], goals }) => {
     fats: acc.fats + (scan.macros?.fats || 0)
   }), { calories: 0, protein: 0, carbs: 0, fats: 0 });
 
-  const Bar = ({ label, current, goal, color }) => (
-    <div className="mb-4">
-      <div className="flex justify-between text-xs font-black uppercase mb-1">
-        <span>{label}</span>
-        <span>{Math.round(current)} / {goal}</span>
+  const Bar = ({ label, current, goal, defaultColor }) => {
+    const isExceeded = current > goal;
+    const color = isExceeded ? 'bg-red-500' : defaultColor;
+    return (
+      <div className="mb-4">
+        <div className={`flex justify-between text-xs font-black uppercase mb-1 ${isExceeded ? 'text-red-500' : ''}`}>
+          <span>{label}</span>
+          <span>{Math.round(current)} / {goal}</span>
+        </div>
+        <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+          <div 
+            className={`h-full ${color} transition-all duration-700`} 
+            style={{ width: `${Math.min((current/goal)*100, 100)}%` }}
+          />
+        </div>
       </div>
-      <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
-        <div 
-          className={`h-full ${color} transition-all duration-700`} 
-          style={{ width: `${Math.min((current/goal)*100, 100)}%` }}
-        />
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
       <h3 className="font-bold text-slate-800 mb-4">Daily Progress</h3>
-      <Bar label="Calories" current={totals.calories} goal={goals?.calories || 2000} color="bg-blue-600" />
+      <Bar label="Calories" current={totals.calories} goal={goals?.calories || 2000} defaultColor="bg-blue-600" />
       <div className="grid grid-cols-3 gap-4">
-        <Bar label="Prot" current={totals.protein} goal={goals?.protein || 150} color="bg-emerald-500" />
-        <Bar label="Carb" current={totals.carbs} goal={goals?.carbs || 200} color="bg-orange-500" />
-        <Bar label="Fat" current={totals.fats} goal={goals?.fats || 70} color="bg-indigo-500" />
+        <Bar label="Prot" current={totals.protein} goal={goals?.protein || 150} defaultColor="bg-emerald-500" />
+        <Bar label="Carb" current={totals.carbs} goal={goals?.carbs || 200} defaultColor="bg-orange-500" />
+        <Bar label="Fat" current={totals.fats} goal={goals?.fats || 70} defaultColor="bg-indigo-500" />
       </div>
     </div>
   );

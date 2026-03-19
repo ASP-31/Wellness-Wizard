@@ -1,10 +1,11 @@
 import express from 'express';
 const router = express.Router();
-const userController = require('../controllers/userController');
-const ScanHistory = require('../models/ScanHistory');
+import * as userController from '../controllers/userController.js';
+import ScanHistory from '../models/ScanHistory.js';
 import { updateProfile } from '../controllers/userController.js';
 // 1. Static routes go FIRST
-router.post('/signup', userController.createUser);
+router.post('/signup', userController.signup);
+router.post('/login', userController.login);
 
 // 2. Dynamic routes (with :) go LAST
 router.get('/:id', userController.getUserProfile);
@@ -28,4 +29,4 @@ router.delete('/:id/history/clear', async (req, res) => {
     }
 });
 router.put('/:userId/update-profile', updateProfile);
-module.exports = router;
+export default router;

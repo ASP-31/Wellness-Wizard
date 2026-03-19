@@ -1,11 +1,11 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai"); // Correct SDK name
-const User = require("../models/User");
-const ScanHistory = require("../models/ScanHistory");
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import User from "../models/User.js";
+import ScanHistory from "../models/ScanHistory.js";
 
 // Initialize with the correct Class name
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-exports.analyzeFood = async (req, res) => {
+export const analyzeImage = async (req, res) => {
     try {
         // Use req.user.id from your 'protect' middleware instead of passing it in body
         const { imageBase64 } = req.body;

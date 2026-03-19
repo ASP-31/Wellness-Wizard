@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Calendar, ChevronRight, Activity } from 'lucide-react';
+import { Calendar, ChevronRight, Activity, Download } from 'lucide-react';
 
 const HistoryPage = ({ user }) => {
   const [scans, setScans] = useState([]);
@@ -16,11 +16,42 @@ const HistoryPage = ({ user }) => {
     fetchHistory();
   }, [user]);
 
+  const exportData = () => {
+    if (scans.length === 0) return;
+    const header = "Date\\tFood Name\\tCalories\\tCarbs\\tProtein\\tFats\\tVerdict\\n";
+    const rows = scans.map(scan => {
+      const date = new Date(scan.createdAt).toLocaleDateString();
+      const verdict = scan.isHealthy ? 'PASSED' : 'CAUTION';
+      return `${date}\\t${scan.foodName}\\t${scan.macros?.calories || 0}\\t${scan.macros?.carbs || 0}\\t${scan.macros?.protein || 0}\\t${scan.macros?.fats || 0}\\t${verdict}`;
+    }).join('\\n');
+    
+    const content = header + rows;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Nutrition_Report.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
-      <div className="flex items-center gap-3 mb-10">
-        <Activity className="text-blue-600" size={32} />
-        <h1 className="text-4xl font-black text-slate-800 tracking-tight">Your Scan Vault</h1>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+        <div className="flex items-center gap-3">
+          <Activity className="text-blue-600" size={32} />
+          <h1 className="text-4xl font-black text-slate-800 tracking-tight">Your Scan Vault</h1>
+        </div>
+        
+        {scans.length > 0 && (
+          <button 
+            onClick={exportData}
+            className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition"
+          >
+            <Download size={16} /> Export Report
+          </button>
+        )}
       </div>
 
       <div className="space-y-4">
