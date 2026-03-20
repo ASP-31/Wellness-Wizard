@@ -34,17 +34,17 @@ const DailyProgress = ({ scans = [], goals }) => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/40 border border-slate-100 relative overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+    <div className="bg-white/80 backdrop-blur-3xl p-8 rounded-[2rem] shadow-xl shadow-blue-900/5 border border-white/50 relative overflow-hidden hover:shadow-2xl transition-shadow duration-300">
       <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-50 rounded-full blur-3xl -z-10"></div>
       
-      <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-        <span className="w-2 h-6 bg-blue-600 rounded-full inline-block"></span>
+      <h3 className="text-xl font-black text-slate-800 mb-6 flex items-center gap-2 tracking-tight">
+        <span className="w-2 h-7 bg-blue-600 rounded-full inline-block shadow-lg shadow-blue-500/50"></span>
         Macro Completion
       </h3>
       
       <Bar label="Calories (kcal)" current={totals.calories} goal={goals?.calories || 2000} gradient="bg-gradient-to-r from-blue-500 to-indigo-500" bgShadow="shadow-blue-500/40" />
       
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 pt-6 border-t border-slate-100">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6 pt-6 border-t border-slate-100/50">
         <Bar label="Protein (g)" current={totals.protein} goal={goals?.protein || 150} gradient="bg-gradient-to-r from-emerald-400 to-teal-500" bgShadow="shadow-emerald-500/40" />
         <Bar label="Carbs (g)" current={totals.carbs} goal={goals?.carbs || 200} gradient="bg-gradient-to-r from-orange-400 to-rose-400" bgShadow="shadow-orange-500/40" />
         <Bar label="Fats (g)" current={totals.fats} goal={goals?.fats || 70} gradient="bg-gradient-to-r from-violet-400 to-fuchsia-500" bgShadow="shadow-violet-500/40" />

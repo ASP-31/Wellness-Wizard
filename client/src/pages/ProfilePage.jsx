@@ -26,7 +26,7 @@ const ProfilePage = ({ user, onComplete }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-indigo-600">
+      <div className="min-h-screen flex flex-col items-center justify-center text-blue-600">
         <Loader2 className="animate-spin mb-4" size={48} />
         <h2 className="text-xl font-bold text-slate-700 tracking-tight">Loading Profile...</h2>
       </div>
@@ -42,8 +42,8 @@ const ProfilePage = ({ user, onComplete }) => {
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
         <div className="flex items-center gap-3">
-          <div className="bg-indigo-100 p-3 rounded-2xl">
-            <User className="text-indigo-600" size={28} />
+          <div className="bg-blue-100 p-3 rounded-2xl border border-blue-200/50 shadow-inner">
+            <User className="text-blue-600" size={28} />
           </div>
           <h1 className="text-4xl font-black text-slate-800 tracking-tight">Your Metrics</h1>
         </div>

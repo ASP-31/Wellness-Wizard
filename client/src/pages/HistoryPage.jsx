@@ -54,8 +54,8 @@ const HistoryPage = ({ user }) => {
     <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-4xl mx-auto py-12 px-6">
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div className="flex items-center gap-3">
-          <div className="bg-indigo-100 p-3 rounded-2xl">
-            <Activity className="text-indigo-600" size={28} />
+          <div className="bg-blue-100 p-3 rounded-2xl border border-blue-200/50 shadow-inner">
+            <Activity className="text-blue-600" size={28} />
           </div>
           <h1 className="text-4xl font-black text-slate-800 tracking-tight">Your Scan Vault</h1>
         </div>
@@ -63,7 +63,7 @@ const HistoryPage = ({ user }) => {
         {scans.length > 0 && (
           <button 
             onClick={exportData}
-            className="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95"
+            className="flex items-center gap-2 bg-gradient-to-br from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-1 transition-all active:scale-95"
           >
             <Download size={18} /> Export Report
           </button>
@@ -78,9 +78,9 @@ const HistoryPage = ({ user }) => {
           </motion.div>
         ) : (
           scans.map((scan) => (
-            <motion.div variants={itemVariants} key={scan._id} className="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex gap-5 items-center hover:shadow-md hover:border-blue-100 transition-all group">
+            <motion.div variants={itemVariants} key={scan._id} className="bg-white/80 backdrop-blur-3xl p-5 rounded-3xl shadow-sm border border-slate-100/60 flex gap-5 items-center hover:shadow-2xl hover:shadow-blue-900/5 hover:border-blue-200 transition-all duration-300 group">
               {/* Image Preview */}
-              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 flex-shrink-0 relative">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 flex-shrink-0 relative shadow-inner">
                 {scan.imageUrl ? (
                   <img src={scan.imageUrl} alt={scan.foodName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 ) : (
@@ -89,7 +89,7 @@ const HistoryPage = ({ user }) => {
               </div>
 
               <div className="flex-grow">
-                <h3 className="font-bold text-slate-800 text-lg">{scan.foodName}</h3>
+                <h3 className="font-bold text-slate-800 text-lg tracking-tight group-hover:text-blue-900 transition-colors">{scan.foodName}</h3>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs text-blue-600 font-black tracking-wide uppercase">{scan.macros.calories} kcal</span>
                   <span className="text-slate-300">•</span>

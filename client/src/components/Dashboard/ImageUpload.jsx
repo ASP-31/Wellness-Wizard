@@ -43,30 +43,30 @@ const ImageUpload = ({ onAnalysisComplete }) => {
   };
 
   return (
-    <div className="p-10 border-2 border-dashed border-blue-200 hover:border-blue-400 bg-gradient-to-b from-blue-50/50 to-indigo-50/30 rounded-[2rem] flex flex-col items-center justify-center transition-colors group relative overflow-hidden">
+    <div className="p-10 border-2 border-dashed border-blue-200 hover:border-blue-500 bg-gradient-to-b from-blue-50/50 to-indigo-50/30 rounded-[2rem] flex flex-col items-center justify-center transition-all duration-300 group relative overflow-hidden shadow-inner">
       {/* Subtle pulse behind the camera icon */}
       <div className="absolute inset-0 bg-blue-400/5 group-hover:bg-blue-400/10 transition-colors"></div>
 
       {loading ? (
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center relative z-10">
           <div className="relative inline-block mb-4">
-            <div className="absolute inset-0 bg-blue-500 rounded-full blur-xl animate-pulse opacity-50"></div>
-            <div className="bg-white p-4 rounded-full shadow-lg relative">
+            <div className="absolute inset-0 bg-blue-500 rounded-full blur-xl animate-pulse opacity-60"></div>
+            <div className="bg-white/90 backdrop-blur-md p-4 rounded-full shadow-2xl relative border border-white">
               <Loader2 className="animate-spin text-blue-600" size={32} />
             </div>
           </div>
-          <p className="text-sm font-black text-blue-800 tracking-wide uppercase">AI actively scanning...</p>
+          <p className="text-sm font-black text-blue-800 tracking-wide uppercase drop-shadow-sm">AI Actively Scanning...</p>
         </motion.div>
       ) : (
         <label className="cursor-pointer flex flex-col items-center group relative z-10 w-full">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-full text-white shadow-xl group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-300 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"></div>
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-full text-white shadow-xl group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-300 relative border border-white/20">
               <Camera size={32} />
             </div>
           </div>
-          <h3 className="mt-6 font-black text-lg text-slate-800 tracking-tight transition-colors">Capture or Upload</h3>
-          <p className="text-slate-500 text-sm font-medium mt-1">Tap to select your food photo</p>
+          <h3 className="mt-8 font-black text-xl text-slate-800 tracking-tight transition-colors drop-shadow-sm">Capture Photo</h3>
+          <p className="text-slate-500 text-sm font-medium mt-1">Tap to select your food image</p>
           <input type="file" className="hidden" accept="image/jpeg, image/png, image/webp" onChange={handleUpload} />
         </label>
       )}
