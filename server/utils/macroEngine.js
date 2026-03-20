@@ -1,6 +1,11 @@
 // server/utils/macroEngine.js
 export const calculateMacros = (user) => {
-    const { weight, height, age, gender, activityLevel, preference } = user;
+    const weight = parseFloat(user.weight) || 70;
+    const height = parseFloat(user.height) || 170;
+    const age = parseInt(user.age, 10) || 25;
+    const gender = user.gender || 'male';
+    const activityLevel = user.activityLevel || user.activity || 'moderate';
+    const preference = user.preference || (user.preferences && user.preferences[0]) || 'Balanced';
 
     // 1. Calculate BMR
     let bmr = (10 * weight) + (6.25 * height) - (5 * age);
@@ -8,7 +13,8 @@ export const calculateMacros = (user) => {
 
     // 2. Adjust for Activity
     const activityMultipliers = { sedentary: 1.2, moderate: 1.55, active: 1.75 };
-    const tdee = bmr * activityMultipliers[activityLevel];
+    const multiplier = activityMultipliers[activityLevel] || 1.55;
+    const tdee = Math.max(0, bmr * multiplier);
 
     // 3. Apply Diet Preference (Example: Keto)
     if (preference === 'Keto') {

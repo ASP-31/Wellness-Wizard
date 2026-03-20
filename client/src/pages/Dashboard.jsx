@@ -13,7 +13,7 @@ const Dashboard = ({ user }) => {
     const fetchTodayScans = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get('/api/scans/history', config);
+        const { data } = await axios.get(`/api/user/${user._id}/history`, config);
         // Filter for today's date on the frontend for real-time UI
         const today = new Date().setHours(0,0,0,0);
         setScans(data.filter(s => new Date(s.createdAt) >= today));

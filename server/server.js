@@ -1,9 +1,8 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 
-dotenv.config();
 connectDB(); // Connect to MongoDB Atlas
 
 const app = express();

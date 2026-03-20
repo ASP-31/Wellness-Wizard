@@ -30,7 +30,7 @@ function App() {
           <Route path="/signup" element={!user ? <Signup onAuth={handleAuth} /> : <Navigate to="/onboarding" />} />
 
           {/* Onboarding: Only if user has no goals/allergies set yet */}
-          <Route path="/onboarding" element={user ? <ProfileForm user={user} onComplete={handleAuth} /> : <Navigate to="/login" />} />
+          <Route path="/onboarding" element={user?.goals ? <Navigate to="/" /> : (user ? <ProfileForm user={user} onComplete={handleAuth} /> : <Navigate to="/login" />)} />
 
           {/* Protected Main Pages */}
           <Route path="/" element={user?.goals ? <Dashboard user={user} /> : <Navigate to="/onboarding" />} />

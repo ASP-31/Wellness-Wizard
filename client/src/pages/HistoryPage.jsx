@@ -9,7 +9,7 @@ const HistoryPage = ({ user }) => {
     const fetchHistory = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get('/api/scans/history', config);
+        const { data } = await axios.get(`/api/user/${user._id}/history`, config);
         setScans(data);
       } catch (err) { console.error(err); }
     };

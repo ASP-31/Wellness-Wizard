@@ -9,11 +9,17 @@ export const analyzeImage = async (req, res) => {
     try {
         // Use req.user.id from your 'protect' middleware instead of passing it in body
         const { imageBase64 } = req.body;
+        if (!imageBase64) return res.status(400).json({ error: "No image payload provided" });
         const userId = req.user.id;
 
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ message: "User not found" });
 
+        let mimeType = "image/jpeg";
+        if (imageBase64.includes("data:")) {
+            mimeType = imageBase64.split(";")[0].split(":")[1];
+        }
+        
         const pureBase64 = imageBase64.includes(",") ? imageBase64.split(",")[1] : imageBase64;
 
         // Sync with the fields Arjun just added in the ProfileForm
@@ -36,13 +42,13 @@ export const analyzeImage = async (req, res) => {
 
         // Using the stable Gemini 1.5 Flash model
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             generationConfig: { responseMimeType: "application/json" } // CamelCase for SDK
         });
 
         const result = await model.generateContent([
             prompt,
-            { inlineData: { data: pureBase64, mimeType: "image/jpeg" } }
+            { inlineData: { data: pureBase64, mimeType } }
         ]);
 
         const response = await result.response;

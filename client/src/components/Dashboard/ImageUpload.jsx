@@ -9,26 +9,38 @@ const ImageUpload = ({ onAnalysisComplete }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('image', file);
     setLoading(true);
 
-    try {
-      // Get the token we saved during Login/Signup
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      
-      const { data } = await axios.post('/api/ai/analyze', formData, {
-        headers: { 
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${userInfo.token}` // Proves who is uploading
-        }
-      });
-      onAnalysisComplete(data);
-    } catch (err) {
-      console.error("Upload failed", err);
-    } finally {
-      setLoading(false);
-    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      try {
+        // Get the token we saved during Login/Signup
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        
+        const base64Data = reader.result;
+        
+        const { data } = await axios.post('/api/ai/analyze', {
+            imageBase64: base64Data,
+            imagePreviewUrl: base64Data
+        }, {
+          headers: { 
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userInfo.token}` // Proves who is uploading
+          }
+        });
+        onAnalysisComplete(data);
+      } catch (err) {
+        console.error("Upload failed", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+        setLoading(false);
+    };
   };
 
   return (
