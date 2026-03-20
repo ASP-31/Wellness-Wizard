@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Activity, Ruler, Weight, AlertCircle } from 'lucide-react';
 import axios from 'axios';
 
-const ProfileForm = ({ user, onComplete }) => {
-  const [formData, setFormData] = useState({
+const ProfileForm = ({ user, onComplete, initialData, isUpdateMode }) => {
+  const [formData, setFormData] = useState(initialData || {
     age: '', height: '', weight: '', allergies: '', activityLevel: 'moderate', preference: 'Keto', gender: 'male'
   });
 
@@ -96,7 +96,7 @@ const ProfileForm = ({ user, onComplete }) => {
           </div>
 
           <button type="submit" className="w-full bg-blue-600 text-white font-bold py-5 rounded-2xl shadow-lg hover:shadow-blue-200 hover:-translate-y-1 transition-all active:scale-95">
-            Initialize Wizard Goals 🚀
+            {isUpdateMode ? 'Update Macros 🚀' : 'Initialize Wizard Goals 🚀'}
           </button>
         </form>
       </div>

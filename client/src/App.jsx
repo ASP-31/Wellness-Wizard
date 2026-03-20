@@ -6,6 +6,7 @@ import Login from './components/Auth/Login';
 import Signup from './components/Auth/Signup';
 import ProfileForm from './components/Onboarding/ProfileForm';
 import Dashboard from './pages/Dashboard';
+import ProfilePage from './pages/ProfilePage';
 import History from './pages/HistoryPage';
 
 import DailyProgress from './components/Dashboard/DailyProgress';
@@ -30,11 +31,12 @@ function App() {
           <Route path="/signup" element={!user ? <Signup onAuth={handleAuth} /> : <Navigate to="/onboarding" />} />
 
           {/* Onboarding: Only if user has no goals/allergies set yet */}
-          <Route path="/onboarding" element={user?.goals ? <Navigate to="/" /> : (user ? <ProfileForm user={user} onComplete={handleAuth} /> : <Navigate to="/login" />)} />
+          <Route path="/onboarding" element={user?.goals?.calories ? <Navigate to="/" /> : (user ? <ProfileForm user={user} onComplete={handleAuth} /> : <Navigate to="/login" />)} />
 
           {/* Protected Main Pages */}
-          <Route path="/" element={user?.goals ? <Dashboard user={user} /> : <Navigate to="/onboarding" />} />
+          <Route path="/" element={user?.goals?.calories ? <Dashboard user={user} /> : <Navigate to="/onboarding" />} />
           <Route path="/history" element={user ? <History user={user} /> : <Navigate to="/login" />} />
+          <Route path="/profile" element={user ? <ProfilePage user={user} onComplete={handleAuth} /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>

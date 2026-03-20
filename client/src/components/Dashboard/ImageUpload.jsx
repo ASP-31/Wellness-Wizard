@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Camera, Loader2 } from 'lucide-react';
+import { Camera, Loader2, UploadCloud } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const ImageUpload = ({ onAnalysisComplete }) => {
   const [loading, setLoading] = useState(false);
@@ -15,9 +16,7 @@ const ImageUpload = ({ onAnalysisComplete }) => {
     reader.readAsDataURL(file);
     reader.onload = async () => {
       try {
-        // Get the token we saved during Login/Signup
         const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        
         const base64Data = reader.result;
         
         const { data } = await axios.post('/api/ai/analyze', {
@@ -26,10 +25,10 @@ const ImageUpload = ({ onAnalysisComplete }) => {
         }, {
           headers: { 
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${userInfo.token}` // Proves who is uploading
+            Authorization: `Bearer ${userInfo.token}`
           }
         });
-        onAnalysisComplete(data);
+        onAnalysisComplete(data.data); // data.data contains the newScan
       } catch (err) {
         console.error("Upload failed", err);
       } finally {
@@ -44,19 +43,31 @@ const ImageUpload = ({ onAnalysisComplete }) => {
   };
 
   return (
-    <div className="p-8 border-2 border-dashed border-blue-100 rounded-3xl bg-blue-50/50 flex flex-col items-center">
+    <div className="p-10 border-2 border-dashed border-blue-200 hover:border-blue-400 bg-gradient-to-b from-blue-50/50 to-indigo-50/30 rounded-[2rem] flex flex-col items-center justify-center transition-colors group relative overflow-hidden">
+      {/* Subtle pulse behind the camera icon */}
+      <div className="absolute inset-0 bg-blue-400/5 group-hover:bg-blue-400/10 transition-colors"></div>
+
       {loading ? (
-        <div className="text-center">
-          <Loader2 className="animate-spin text-blue-600 mb-2" size={32} />
-          <p className="text-sm font-bold text-blue-800">Wizard is scanning...</p>
-        </div>
-      ) : (
-        <label className="cursor-pointer flex flex-col items-center group">
-          <div className="bg-blue-600 p-5 rounded-full text-white shadow-lg group-hover:scale-110 transition">
-            <Camera size={28} />
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center relative z-10">
+          <div className="relative inline-block mb-4">
+            <div className="absolute inset-0 bg-blue-500 rounded-full blur-xl animate-pulse opacity-50"></div>
+            <div className="bg-white p-4 rounded-full shadow-lg relative">
+              <Loader2 className="animate-spin text-blue-600" size={32} />
+            </div>
           </div>
-          <span className="mt-3 font-bold text-slate-600">Upload Meal Photo</span>
-          <input type="file" className="hidden" onChange={handleUpload} />
+          <p className="text-sm font-black text-blue-800 tracking-wide uppercase">AI actively scanning...</p>
+        </motion.div>
+      ) : (
+        <label className="cursor-pointer flex flex-col items-center group relative z-10 w-full">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-full text-white shadow-xl group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-300 relative">
+              <Camera size={32} />
+            </div>
+          </div>
+          <h3 className="mt-6 font-black text-lg text-slate-800 tracking-tight transition-colors">Capture or Upload</h3>
+          <p className="text-slate-500 text-sm font-medium mt-1">Tap to select your food photo</p>
+          <input type="file" className="hidden" accept="image/jpeg, image/png, image/webp" onChange={handleUpload} />
         </label>
       )}
     </div>

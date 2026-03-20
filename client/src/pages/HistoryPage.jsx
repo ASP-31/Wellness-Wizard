@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Calendar, ChevronRight, Activity, Download } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const HistoryPage = ({ user }) => {
   const [scans, setScans] = useState([]);
@@ -36,55 +37,74 @@ const HistoryPage = ({ user }) => {
     document.body.removeChild(link);
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, scale: 0.95, y: 15 },
+    show: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 400, damping: 25 } }
+  };
+
   return (
-    <div className="max-w-4xl mx-auto py-12 px-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+    <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-4xl mx-auto py-12 px-6">
+      <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div className="flex items-center gap-3">
-          <Activity className="text-blue-600" size={32} />
+          <div className="bg-indigo-100 p-3 rounded-2xl">
+            <Activity className="text-indigo-600" size={28} />
+          </div>
           <h1 className="text-4xl font-black text-slate-800 tracking-tight">Your Scan Vault</h1>
         </div>
         
         {scans.length > 0 && (
           <button 
             onClick={exportData}
-            className="flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition"
+            className="flex items-center gap-2 bg-gradient-to-br from-slate-800 to-slate-900 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95"
           >
-            <Download size={16} /> Export Report
+            <Download size={18} /> Export Report
           </button>
         )}
-      </div>
+      </motion.div>
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         {scans.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200 text-slate-400 font-bold">
-            No meals scanned yet. Start your journey!
-          </div>
+          <motion.div variants={itemVariants} className="text-center py-24 bg-white/50 backdrop-blur-sm rounded-[2rem] border-2 border-dashed border-slate-200 text-slate-400 font-bold shadow-sm">
+            <div className="text-4xl mb-4">🍽️</div>
+            No meals scanned yet. Your journey begins today!
+          </motion.div>
         ) : (
           scans.map((scan) => (
-            // Inside your scans.map() loop
-            <div key={scan._id} className="bg-white p-4 rounded-3xl shadow-sm border flex gap-4 items-center">
+            <motion.div variants={itemVariants} key={scan._id} className="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 flex gap-5 items-center hover:shadow-md hover:border-blue-100 transition-all group">
               {/* Image Preview */}
-              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0">
+              <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 flex-shrink-0 relative">
                 {scan.imageUrl ? (
-                  <img src={scan.imageUrl} alt={scan.foodName} className="w-full h-full object-cover" />
+                  <img src={scan.imageUrl} alt={scan.foodName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-2xl">🥗</div>
+                  <div className="w-full h-full flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-500">🥗</div>
                 )}
               </div>
 
               <div className="flex-grow">
-                <h3 className="font-bold text-slate-800">{scan.foodName}</h3>
-                <p className="text-xs text-blue-600 font-bold">{scan.macros.calories} kcal</p>
+                <h3 className="font-bold text-slate-800 text-lg">{scan.foodName}</h3>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-xs text-blue-600 font-black tracking-wide uppercase">{scan.macros.calories} kcal</span>
+                  <span className="text-slate-300">•</span>
+                  <span className="text-xs text-slate-500 font-medium">{new Date(scan.createdAt).toLocaleDateString()}</span>
+                </div>
               </div>
 
-              <div className={`px-3 py-1 rounded-full text-[10px] font-black ${scan.isHealthy ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              <div className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase ${scan.isHealthy ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-emerald-500/10' : 'bg-red-50 text-red-600 border border-red-100 shadow-red-500/10'} shadow-sm`}>
                 {scan.isHealthy ? 'PASSED' : 'CAUTION'}
               </div>
-            </div>
+            </motion.div>
           ))
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
