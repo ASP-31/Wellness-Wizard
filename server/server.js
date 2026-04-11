@@ -20,6 +20,9 @@ app.use(express.json({ limit: '10mb' })); // Increase limit for image data
 import userRoutes from './routes/userRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 
+// Health check endpoint (used by pingers to keep the server warm)
+app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
+
 app.use('/api/user', userRoutes);
 app.use('/api/ai', aiRoutes);
 
