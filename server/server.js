@@ -9,7 +9,11 @@ const app = express();
 export { app };
 
 // Middleware
-app.use(cors());
+
+  app.use(cors({
+    origin: ['https://wellness-wizard-7liq.onrender.com/'],
+    credentials: true
+  }))
 app.use(express.json({ limit: '10mb' })); // Increase limit for image data
 
 // Routes
