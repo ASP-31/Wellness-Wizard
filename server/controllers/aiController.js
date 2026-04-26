@@ -1,9 +1,32 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import User from "../models/User.js";
 import ScanHistory from "../models/ScanHistory.js";
+import CircuitBreaker from "opossum";
+import logger from "../utils/logger.js";
 
 // Initialize with the correct Class name
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Create the isolated function for the circuit breaker
+const callGeminiApi = async ({ model, prompt, pureBase64, mimeType }) => {
+    const result = await model.generateContent([
+        prompt,
+        { inlineData: { data: pureBase64, mimeType } }
+    ]);
+    const response = await result.response;
+    return JSON.parse(response.text()); // SDK handles the JSON parsing safely
+};
+
+const breakerOptions = {
+    timeout: 15000, 
+    errorThresholdPercentage: 50, 
+    resetTimeout: 30000
+};
+const aiBreaker = new CircuitBreaker(callGeminiApi, breakerOptions);
+
+aiBreaker.on('open', () => logger.warn("AI Circuit Breaker opened"));
+aiBreaker.on('halfOpen', () => logger.info("AI Circuit Breaker half-open"));
+aiBreaker.on('close', () => logger.info("AI Circuit Breaker closed"));
 
 export const analyzeImage = async (req, res) => {
     try {
@@ -46,22 +69,14 @@ export const analyzeImage = async (req, res) => {
             generationConfig: { responseMimeType: "application/json" } // CamelCase for SDK
         });
 
-        const result = await model.generateContent([
-            prompt,
-            { inlineData: { data: pureBase64, mimeType } }
-        ]);
-
-        const response = await result.response;
-        const analysis = JSON.parse(response.text()); // SDK handles the JSON parsing safely
+        // Use circuit breaker
+        const analysis = await aiBreaker.fire({ model, prompt, pureBase64, mimeType });
 
         // Save to MongoDB with the specific userId
-        // Inside your analyzeFood controller
         const newScan = new ScanHistory({
             userId: user._id,
             imageUrl: req.body.imagePreviewUrl || "", // Pass the URL from the frontend
             foodName: analysis.foodName,
-            // ... rest of the fields
-
             isHealthy: analysis.isHealthy,
             reasoning: analysis.reasoning,
             macros: analysis.macros
@@ -72,7 +87,10 @@ export const analyzeImage = async (req, res) => {
         res.json({ message: "Success", data: newScan });
 
     } catch (error) {
-        console.error("AI Error:", error);
+        logger.error({ err: error }, "AI Analysis Error");
+        if (aiBreaker.opened) {
+            return res.status(503).json({ error: "AI service is currently overwhelmed. Please try again later." });
+        }
         res.status(500).json({ error: "Analysis failed. Check your API key and Image format." });
     }
 };

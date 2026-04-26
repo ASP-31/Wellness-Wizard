@@ -14,4 +14,7 @@ const scanHistorySchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+// Explicit compound index to optimize dashboard queries mapping user history
+scanHistorySchema.index({ userId: 1, createdAt: -1 });
+
 export default mongoose.model("ScanHistory", scanHistorySchema);

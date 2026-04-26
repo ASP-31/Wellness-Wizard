@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import { Camera, Loader2, UploadCloud } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+// Setup exponential backoff for resilience against 503 HTTP status (Circuit Breaker open)
+axiosRetry(axios, { 
+  retries: 3, 
+  retryDelay: axiosRetry.exponentialDelay,
+  retryCondition: (error) => {
+    // Retry on 5xx or network errors, including our 503 Circuit Breaker and 429 Rate Limit
+    return axiosRetry.isNetworkOrIdempotentRequestError(error) || error.response?.status === 503 || error.response?.status === 429;
+  }
+});
 
 const ImageUpload = ({ onAnalysisComplete }) => {
   const [loading, setLoading] = useState(false);

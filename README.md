@@ -12,11 +12,20 @@
 
 ## 🛠️ Tech Stack
 
-* **Frontend**: React.js, Tailwind CSS, Axios.
+* **Frontend**: React.js, Tailwind CSS, Axios, Axios-Retry.
 * **Backend**: Node.js, Express.js.
 * **Database**: MongoDB.
 * **AI Engine**: Gemini 3.0 API.
-* **Image Handling**: Cloudinary.
+* **Resiliency & SRE**: Opossum (Circuit Breakers), Pino (Structured Logging), Helmet (Security).
+
+## 🛡️ Enterprise Stability & SRE Upgrades
+
+Recently upgraded to handle production scaling safely:
+* **Circuit Breakers**: `opossum` wrapped around the Gemini API to prevent app hangs on AI service degradation.
+* **Exponential Backoff**: Configured `axios-retry` on the client to automatically retry failed requests smoothly.
+* **Rate Limiting**: Applied global API rate limiting and strict constraints on costly AI analysis endpoints.
+* **Database Indexes**: Implemented compound MongoDB indexing to handle thousands of deep dashboard history queries flawlessly.
+* **Logging**: Integrated `Pino` JSON structured logging for detailed telemetry on deployments.
 
 ## 📋 Installation & Setup
 
