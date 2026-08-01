@@ -10,43 +10,43 @@ connectDB(); // Connect to MongoDB Atlas
 const app = express();
 export { app };
 
-// Middleware
 // Security Headers
 app.use(helmet());
 
 // Cross-Origin Resource Sharing
 app.use(cors({
-  origin: ['https://wellness-wizard-7liq.onrender.com/', 'http://localhost:3000'], // Added localhost:3000 for local dev
+  origin: ['https://wellness-wizard-7liq.onrender.com/', 'http://localhost:3000', 'http://localhost:5173'],
   credentials: true
 }));
 
 // Global Rate Limiting
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 200,
   message: 'Too many requests from this IP, please try again after 15 minutes'
 });
 app.use('/api/', globalLimiter);
 
 // Specific stricter limit for AI endpoints
 const aiLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 20, // limit each IP to 20 AI requests per hour
+  windowMs: 60 * 60 * 1000,
+  max: 60, // increased for rich interactive usage
   message: 'AI analysis limits exceeded. Please try again later.'
 });
 app.use('/api/ai/', aiLimiter);
 
-app.use(express.json({ limit: '10mb' })); // Increase limit for image data
+app.use(express.json({ limit: '10mb' }));
 
 // Routes
 import userRoutes from './routes/userRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import scanRoutes from './routes/scanRoutes.js';
 
-// Health check endpoint (used by pingers to keep the server warm)
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 
 app.use('/api/user', userRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/scans', scanRoutes);
 
 import logger from './utils/logger.js';
 
