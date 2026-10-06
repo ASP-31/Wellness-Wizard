@@ -15,7 +15,7 @@ app.use(helmet());
 
 // Cross-Origin Resource Sharing
 app.use(cors({
-  origin: ['https://wellness-wizard-7liq.onrender.com/', 'http://localhost:3000', 'http://localhost:5173'],
+  origin: ['https://wellness-wizard-7liq.onrender.com', 'http://localhost:3000', 'http://localhost:5173'],
   credentials: true
 }));
 
